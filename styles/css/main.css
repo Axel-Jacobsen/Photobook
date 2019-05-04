@@ -1,6 +1,14 @@
+@import url("https://fonts.googleapis.com/css?family=Inconsolata");
 body {
   height: 100%;
   width: 100%;
+  background-color: #f0f0f0;
+}
+
+img {
+  height: 200px;
+  width: auto;
+  margin: 20px 20px 20px 20px;
 }
 
 .image_group {
@@ -8,14 +16,14 @@ body {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-content: space-evenly;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 
-img {
-  height: 200px;
-  width: auto;
-  margin: 20px 0 20px 0;
+.title {
+  margin: 20px 0 0 20px;
+  font-family: "Inconsolata";
+  font-size: 30px;
 }
 
 /*# sourceMappingURL=main.css.map */
