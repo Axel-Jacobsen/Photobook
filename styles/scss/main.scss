@@ -1,0 +1,20 @@
+body {
+	height: 100%;
+	width: 100%;
+}
+
+.image_group {
+	height: 100%;
+	width: 100%;
+
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-content: space-evenly;
+}
+
+img {
+	height: 200px;
+	width: auto;
+	margin: 20px 0 20px 0;
+}
