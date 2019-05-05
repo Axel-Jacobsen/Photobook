@@ -4,13 +4,21 @@ body {
 	height: 100%;
 	width: 100%;
 	background-color: #d8d8d8;
-	padding: 40px;
+	margin: 0;
+	padding: 0;
 }
 
 img {
 	height: 200px;
 	width: auto;
 	margin: 20px;
+}
+
+#wrap {
+	max-height: 100%;
+	max-width: 100%;
+	overflow-x: hidden;
+	margin: 40px;
 }
 
 .image_group {
