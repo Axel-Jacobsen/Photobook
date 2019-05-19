@@ -13,7 +13,7 @@ img {
   margin: 20px;
 }
 
-#wrap {
+.wrap {
   max-height: 100%;
   max-width: 100%;
   overflow-x: hidden;
@@ -33,6 +33,51 @@ img {
   margin: 20px 0 0 20px;
   font-family: "Inconsolata";
   font-size: 30px;
+}
+
+#popup {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.9);
+  /* Black w/ opacity */
+}
+
+#modal-img {
+  margin: auto;
+  display: block;
+  width: 50%;
+  height: auto;
+}
+
+#caption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+  font-family: "Inconsolata";
 }
 
 /*# sourceMappingURL=main.css.map */

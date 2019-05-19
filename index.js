@@ -1,5 +1,47 @@
-let img_list = document.getElementsByTagName("img");
- 
+// Immediately index all the images, and place onclick functionality
+
+let img_list = document.getElementsByTagName("img")
 for (let i = 0; i < img_list.length; ++i) {
-    console.log(img_list.item(i).src)
+    let el = img_list.item(i)
+
+    el.onclick = () => {
+        const imgModal = createModal()
+        el.parentElement.appendChild(imgModal)
+        document.getElementById('modal-img').src = el.getAttribute("src")
+        document.getElementById('caption').innerHTML = el.getAttribute("alt")
+    }
+}
+
+const insertAfter = (el, referenceNode) => {
+    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling)
+}
+
+// Function to create the html element below
+const createModal = () => {
+    const divStr = '<div id="myModal" class="modal">' +
+        '<img id="modal-img">' +
+        '<div id="caption"></div>' +
+        '</div>'
+
+    // This creates an entire html document with the divStr node in the body - we just need the divStr node
+    const modalDoc = new DOMParser().parseFromString(divStr, 'text/html')
+    const relevantNode = modalDoc.body.firstChild
+
+    // Exit modal with click or with escape key
+    relevantNode.onclick = () => {
+        removeModal()
+    }
+    return relevantNode
+}
+
+// On Esc key, remove the modal element to return to the original page
+document.addEventListener("keydown", event => {
+    if (event.key == "Escape") {
+        removeModal()
+    }
+})
+
+const removeModal = () => {
+    const imgModal = document.getElementById("myModal")
+    imgModal ? imgModal.parentElement.removeChild(imgModal) : null
 }
