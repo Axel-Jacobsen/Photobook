@@ -11,6 +11,7 @@ img {
   height: 149px;
   width: auto;
   margin: 20px;
+  cursor: pointer;
 }
 
 .wrap {
