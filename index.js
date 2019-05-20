@@ -1,5 +1,4 @@
-// Immediately index all the images, and place onclick functionality
-
+// Immediately index all the images, place onclick functionality on all images
 let img_list = document.getElementsByTagName("img")
 for (let i = 0; i < img_list.length; ++i) {
     let el = img_list.item(i)
@@ -7,13 +6,9 @@ for (let i = 0; i < img_list.length; ++i) {
     el.onclick = () => {
         const imgModal = createModal()
         el.parentElement.appendChild(imgModal)
-        document.getElementById('modal-img').src = el.getAttribute("src")
+        document.getElementById('modal-img').src = el.getAttribute("src").replace('_small', '')
         document.getElementById('caption').innerHTML = el.getAttribute("alt")
     }
-}
-
-const insertAfter = (el, referenceNode) => {
-    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling)
 }
 
 // Function to create the html element below
@@ -41,6 +36,7 @@ document.addEventListener("keydown", event => {
     }
 })
 
+// Remove a html node from its parent
 const removeModal = () => {
     const imgModal = document.getElementById("myModal")
     imgModal ? imgModal.parentElement.removeChild(imgModal) : null
