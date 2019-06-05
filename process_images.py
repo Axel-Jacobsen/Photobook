@@ -5,7 +5,7 @@ small_list = []
 reg_list = []
 
 # Rename all files to .jpg and resize them if they arent already
-for fname in os.listdir('./'):
+for fname in os.listdir('./images'):
 	if 'jpeg' in fname and fname != 'jpegTojpg.py':
 		im = Image.open(fname)
 		rgb_im = im.convert('RGB')
@@ -30,6 +30,5 @@ for fname in not_resized_images:
 		img = img.resize((basewidth, hsize), Image.LANCZOS)
 		fname_split = fname.split('.')
 		new_fname = fname_split[0] + '_small.' + fname_split[1]
-		print(new_fname)
 		img.save(new_fname)
 		print('{} created!'.format(new_fname))
