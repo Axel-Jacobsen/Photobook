@@ -22,14 +22,14 @@ filter(lambda str: str.replace('_small', ''), small_list)
 not_resized_images = list(set(reg_list) - set(small_list))
 print(not_resized_images)
 
-# for fname in not_resized_images:
-# 	if '.jpg' in fname and fname != 'process_images.py':	
-# 		basewidth = 1000
-# 		img = Image.open(fname)
-# 		wpercent = (basewidth / float(img.size[0]))
-# 		hsize = int((float(img.size[1]) * float(wpercent)))
-# 		img = img.resize((basewidth, hsize), Image.LANCZOS)
-# 		fname_split = fname.split('.')
-# 		new_fname = fname_split[0] + '_small.' + fname_split[1]
-# 		print('creating {}'.format(new_fname))
-# 		img.save(new_fname)
+for fname in not_resized_images:
+	if '.jpg' in fname and fname != 'process_images.py':	
+		basewidth = 1000
+		img = Image.open(fname)
+		wpercent = (basewidth / float(img.size[0]))
+		hsize = int((float(img.size[1]) * float(wpercent)))
+		img = img.resize((basewidth, hsize), Image.LANCZOS)
+		fname_split = fname.split('.')
+		new_fname = fname_split[0] + '_small.' + fname_split[1]
+		print('creating {}'.format(new_fname))
+		img.save(new_fname)
