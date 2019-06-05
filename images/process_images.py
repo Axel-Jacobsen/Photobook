@@ -18,9 +18,8 @@ for fname in os.listdir('.'):
 	else:
 		reg_list.append(fname)
 
-filter(lambda str: str.replace('_small', ''), small_list)
+small_list = map(lambda str: str.replace('_small', ''), small_list)
 not_resized_images = list(set(reg_list) - set(small_list))
-print(not_resized_images)
 
 for fname in not_resized_images:
 	if '.jpg' in fname and fname != 'process_images.py':	
