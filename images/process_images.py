@@ -14,11 +14,10 @@ for fname in os.listdir('.'):
 		os.remove(fname)
 
 	if '_small' in fname:
-		small_list.append(fname)
+		small_list.append((fname.split('.'))[0].replace('_small', ''))
 	else:
-		reg_list.append(fname)
+		reg_list.append((fname.split('.'))[0])
 
-small_list = map(lambda str: str.replace('_small', ''), small_list)
 not_resized_images = list(set(reg_list) - set(small_list))
 
 for fname in not_resized_images:
