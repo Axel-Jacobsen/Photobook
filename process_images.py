@@ -21,18 +21,19 @@ for fname in os.listdir('./images'):
 
     if '_small' in fname:
         small_list.append(fname.replace(
-            'images/', '').replace('.jpg', '').replace('_small', ''))
+            'images/', '').replace('_small', ''))
 
     else:
-        reg_list.append(fname.replace('images/', '').replace('.jpg', ''))
+        reg_list.append(fname.replace('images/', ''))
 
 not_resized_images = list(set(reg_list) - set(small_list))
+print(not_resized_images)
 
 for fname in not_resized_images:
 
-    if '.jpg' in fname:
+    if '.jpg' in fname and '.icloud' not in fname:
         basewidth = 1000
-        img = Image.open('images/' + fname + '.jpg')
+        img = Image.open('images/' + fname)
         wpercent = (basewidth / float(img.size[0]))
         hsize = int((float(img.size[1]) * float(wpercent)))
         img = img.resize((basewidth, hsize), Image.LANCZOS)
@@ -52,14 +53,16 @@ with open('index.html') as f:
                        for im in images]
 
     new_images = list(set(reg_list) - set(existing_images))
-    
+
     for im in new_images:
-        alt = input('Enter description for file {}: '.format(im))
-        new_soup = bs4.BeautifulSoup(features='html5lib')
-        new_tag = soup.new_tag('img', src='images/{}_small.jpg'.format(im), alt=alt)
-        soup.find('div', {'class', 'image_group'}).append(new_tag)
-        with open("index.html", "w", encoding='utf-8') as f:
-            f.write(str(soup))
+        if '.jpg' in fname and '.icloud' not in fname:
+            alt = input('Enter description for file {}: '.format(im))
+            new_soup = bs4.BeautifulSoup(features='html5lib')
+            new_tag = soup.new_tag(
+                'img', src='images/{}_small.jpg'.format(im), alt=alt)
+            soup.find('div', {'class', 'image_group'}).append(new_tag)
+            with open("index.html", "w", encoding='utf-8') as f:
+                f.write(str(soup))
 
     if len(new_images):
         print('Inserted {} images!'.format(len(new_images)))
