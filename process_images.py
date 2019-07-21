@@ -11,10 +11,12 @@ for fname in os.listdir('./images'):
     if fname == '.DS_Store':
         continue
 
+    fname = './images/' + fname
+
     if 'jpeg' in fname:
         im = Image.open(fname)
         rgb_im = im.convert('RGB')
-        rgb_im.save('images/' + fname.replace('jpeg', 'jpg'))
+        rgb_im.save(fname.replace('jpeg', 'jpg'))
         print('converting {}'.format(fname))
         os.remove(fname)
         fname = fname.replace('jpeg', 'jpg')
@@ -27,7 +29,6 @@ for fname in os.listdir('./images'):
         reg_list.append(fname.replace('images/', ''))
 
 not_resized_images = list(set(reg_list) - set(small_list))
-print(not_resized_images)
 
 for fname in not_resized_images:
 
@@ -56,6 +57,7 @@ with open('index.html') as f:
 
     for im in new_images:
         if '.jpg' in fname and '.icloud' not in fname:
+
             alt = input('Enter description for file {}: '.format(im))
             new_soup = bs4.BeautifulSoup(features='html5lib')
             new_tag = soup.new_tag(
