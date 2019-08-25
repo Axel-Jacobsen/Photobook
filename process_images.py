@@ -2,71 +2,69 @@ from PIL import Image
 import bs4
 import os
 
-small_list = []
-reg_list = []
+def convert_to_jpg(dir: str, fname: str):
+    im = Image.open(dir + fname)
+    rgb_im = im.convert('RGB')
+    print(f'converting {fname}')
+    rgb_im.save((dir + fname).replace('jpeg', 'jpg'))
+    os.remove(fname)
+    fname = fname.replace('jpeg', 'jpg')
 
-# Rename all files to .jpg and resize them if they arent already
-for fname in os.listdir('./images'):
+def process_fnames(dir: str):
+    l = []
+    for fname in os.listdir(dir):
+        if '.jpeg' in fname:
+            convert_to_jpg(dir, fname)
+        if '.jpg' in fname:
+            l.append(fname)
+    return l
 
-    if fname == '.DS_Store':
-        continue
-
-    fname = './images/' + fname
-
-    if 'jpeg' in fname:
-        im = Image.open(fname)
-        rgb_im = im.convert('RGB')
-        rgb_im.save(fname.replace('jpeg', 'jpg'))
-        print('converting {}'.format(fname))
-        os.remove(fname)
-        fname = fname.replace('jpeg', 'jpg')
-
-    if '_small' in fname:
-        small_list.append(fname.replace(
-            'images/', '').replace('_small', ''))
-
-    else:
-        reg_list.append(fname.replace('images/', ''))
-
-not_resized_images = list(set(reg_list) - set(small_list))
-
-for fname in not_resized_images:
-
-    if '.jpg' in fname and '.icloud' not in fname:
+def resize(dir: str, im_list: list):
+    for fname in im_list:
         basewidth = 1000
-        img = Image.open('images/' + fname)
-        wpercent = (basewidth / float(img.size[0]))
-        hsize = int((float(img.size[1]) * float(wpercent)))
-        img = img.resize((basewidth, hsize), Image.LANCZOS)
-        new_fname = fname + '_small.jpg'
-        print('creating {}'.format(new_fname))
-        img.save('images/' + new_fname)
+        im = Image.open(dir + fname)
+        wpercent = (basewidth / float(im.size[0]))
+        hsize = int((float(im.size[1]) * float(wpercent)))
+        im = im.resize((basewidth, hsize), Image.LANCZOS)
+        print(f'creating {fname} in small_images')
+        im.save('small_images/' + fname)
 
-with open('index.html') as f:
-    txt = f.read()
-    soup = bs4.BeautifulSoup(txt, features='html5lib')
-    image_div = soup.find('div', {'class', 'image_group'})
-    images = image_div.findChildren('img', recursive=False)
-    existing_images = [im.get('src')
-                       .replace('images/', '')
-                       .replace('.jpg', '')
-                       .replace('_small', '')
-                       for im in images]
+def add_html(dir: str, im_list: list, html_fname: str):
+    with open(html_fname) as f:
+        txt = f.read()
+        soup = bs4.BeautifulSoup(txt, features='html5lib')
+        image_div = soup.find('div', {'class', 'image_group'})
+        images = image_div.findChildren('img', recursive=False)
 
-    new_images = list(set(reg_list) - set(existing_images))
+        clean_fname = lambda im: im.get('src').replace('small_images/', '')
+        is_picture  = lambda fname: fname.get('src').endswith('.jpg')
+        existing_ims = list(
+                            filter(is_picture,
+                                map(clean_fname, 
+                                    images)
+                                )
+                            )
 
-    for im in new_images:
-        if '.jpg' in fname and '.icloud' not in fname:
+        new_images = list(set(im_list) - set(existing_ims))
 
-            alt = input('Enter description for file {}: '.format(im))
-            new_soup = bs4.BeautifulSoup(features='html5lib')
+        for fname in new_images:
+            Image.open(dir + fname).show()
+            caption = input('Enter description for file {}: '.format(fname))
             new_tag = soup.new_tag(
-                'img', src='images/{}_small.jpg'.format(im), alt=alt)
+                'img', src=f'{dir}{fname}', alt=caption)
             soup.find('div', {'class', 'image_group'}).append(new_tag)
             with open("index.html", "w", encoding='utf-8') as f:
                 f.write(str(soup))
 
-    if len(new_images):
-        print('Inserted {} images!'.format(len(new_images)))
+        if len(new_images):
+            print(f'Inserted {len(new_images)} images!')
 
-print('Done all tasks!')
+if __name__ == '__main__':
+    BASE_DIR = './images/'
+    SMALL_DIR = './small_images'
+
+    reg_list = process_fnames(BASE_DIR)
+    small_list = process_fnames(SMALL_DIR)
+    new_ims = list(set(reg_list) - set(small_list))
+    resize(BASE_DIR, new_ims)
+    add_html(BASE_DIR, new_ims, 'index.html')
