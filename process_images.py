@@ -2,20 +2,25 @@ from PIL import Image
 import bs4
 import os
 
-def convert_to_jpg(dir: str, fname: str):
-    im = Image.open(dir + fname)
-    rgb_im = im.convert('RGB')
-    print(f'converting {fname}')
-    rgb_im.save((dir + fname).replace('jpeg', 'jpg'))
-    os.remove(fname)
-    fname = fname.replace('jpeg', 'jpg')
+def convert_to_png(dir: str, fname: str):
+    if not fname.endswith('.png'):
+        try:
+            im = Image.open(dir + fname)
+            rgb_im = im.convert('RGB')
+            fname_end = fname.replace('.jpeg', '.png').replace('.jpg', '.png')
+            print(f'converting {fname} to {fname_end}')
+            print(dir + fname_end)
+            rgb_im.save(dir + fname_end)
+            os.remove(dir + fname)
+        except OSError:
+            print(f'ignoring {fname}')
 
 def process_fnames(dir: str):
     l = []
     for fname in os.listdir(dir):
-        if '.jpeg' in fname:
-            convert_to_jpg(dir, fname)
-        if '.jpg' in fname:
+        if '.jpeg' or '.jpg' in fname:
+            convert_to_png(dir, fname)
+        if '.png' in fname:
             l.append(fname)
     return l
 
@@ -37,7 +42,7 @@ def add_html(dir: str, im_list: list, html_fname: str):
         images = image_div.findChildren('img', recursive=False)
 
         clean_fname = lambda im: im.get('src').replace('small_images/', '')
-        is_picture  = lambda fname: fname.get('src').endswith('.jpg')
+        is_picture  = lambda fname: fname.endswith('.png')
         existing_ims = list(
                             filter(is_picture,
                                 map(clean_fname, 
