@@ -32,7 +32,7 @@ def resize(dir: str, im_list: list):
         print(f'creating {fname} in small_images')
         im.save('small_images/' + fname)
 
-def add_html(dir: str, im_list: list, html_fname: str):
+def add_html(in_dir: str, out_dir: str, im_list: list, html_fname: str):
     with open(html_fname) as f:
         txt = f.read()
         soup = bs4.BeautifulSoup(txt, features='html5lib')
@@ -51,10 +51,10 @@ def add_html(dir: str, im_list: list, html_fname: str):
         new_images = list(set(im_list) - set(existing_ims))
 
         for fname in new_images:
-            Image.open(dir + fname).show()
+            Image.open(in_dir + fname).show()
             caption = input('Enter description for file {}: '.format(fname))
             new_tag = soup.new_tag(
-                'img', src=f'{dir}{fname}', alt=caption)
+                'img', src=f'{out_dir}{fname}', alt=caption)
             soup.find('div', {'class', 'image_group'}).append(new_tag)
             with open("index.html", "w", encoding='utf-8') as f:
                 f.write(str(soup))
@@ -72,4 +72,4 @@ if __name__ == '__main__':
                 filter(lambda f: f.endswith('.png'), set(reg_list) - set(small_list))
             )
     resize(BASE_DIR, new_ims)
-    add_html(BASE_DIR, new_ims, 'index.html')
+    add_html(BASE_DIR, SMALL_DIR, new_ims, 'index.html')
