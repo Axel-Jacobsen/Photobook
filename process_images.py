@@ -9,7 +9,6 @@ def convert_to_png(dir: str, fname: str):
             rgb_im = im.convert('RGB')
             fname_end = fname.replace('.jpeg', '.png').replace('.jpg', '.png')
             print(f'converting {fname} to {fname_end}')
-            print(dir + fname_end)
             rgb_im.save(dir + fname_end)
             os.remove(dir + fname)
         except OSError:
@@ -18,10 +17,9 @@ def convert_to_png(dir: str, fname: str):
 def process_fnames(dir: str):
     l = []
     for fname in os.listdir(dir):
-        if '.jpeg' or '.jpg' in fname:
+        if fname.endswith('.jpeg') or fname.endswith('.jpg'):
             convert_to_png(dir, fname)
-        if '.png' in fname:
-            l.append(fname)
+        l.append(fname.replace('.jpeg', '.png').replace('.jpg', '.png'))
     return l
 
 def resize(dir: str, im_list: list):
@@ -65,11 +63,13 @@ def add_html(dir: str, im_list: list, html_fname: str):
             print(f'Inserted {len(new_images)} images!')
 
 if __name__ == '__main__':
-    BASE_DIR = './images/'
-    SMALL_DIR = './small_images'
+    BASE_DIR = 'images/'
+    SMALL_DIR = 'small_images/'
 
     reg_list = process_fnames(BASE_DIR)
     small_list = process_fnames(SMALL_DIR)
-    new_ims = list(set(reg_list) - set(small_list))
+    new_ims = list(
+                filter(lambda f: f.endswith('.png'), set(reg_list) - set(small_list))
+            )
     resize(BASE_DIR, new_ims)
     add_html(BASE_DIR, new_ims, 'index.html')
