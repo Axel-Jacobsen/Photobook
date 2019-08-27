@@ -46,7 +46,7 @@ img {
   display: block;
   position: fixed;
   z-index: 1;
-  padding-top: 150px;
+  padding-top: 120px;
   left: 0;
   top: 0;
   width: 100%;
@@ -58,7 +58,7 @@ img {
 #modal-img {
   margin: auto;
   display: block;
-  width: 50%;
+  width: 55%;
   height: auto;
 }
 
