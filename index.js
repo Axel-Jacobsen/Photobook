@@ -30,7 +30,7 @@ for (let i = 0; i < img_list.length; ++i) {
     el.onclick = () => {
         const imgModal = createModal()
         el.parentElement.appendChild(imgModal)
-        document.getElementById('modal-img').src = el.getAttribute("src").replace('_small', '')
+        document.getElementById('modal-img').src = el.getAttribute("src").replace('small_', '')
         document.getElementById('caption').innerHTML = el.getAttribute("alt")
     }
 }
