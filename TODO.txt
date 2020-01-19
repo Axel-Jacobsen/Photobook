@@ -1,3 +1,0 @@
-- Add loading GIF while image is loading
-- Fix scrolling while opened image
-
