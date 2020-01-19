@@ -35,18 +35,18 @@ def resize(dir: str, im_list: list):
 def add_html(in_dir: str, out_dir: str, im_list: list, html_fname: str):
     with open(html_fname) as f:
         txt = f.read()
-        soup = bs4.BeautifulSoup(txt, features='html5lib')
+        soup = bs4.BeautifulSoup(txt, features='html.parser')
         image_div = soup.find('div', {'class', 'image_group'})
         images = image_div.findChildren('img', recursive=False)
 
         clean_fname = lambda im: im.get('src').replace('small_images/', '')
         is_picture  = lambda fname: fname.endswith('.png')
         existing_ims = list(
-                            filter(is_picture,
-                                map(clean_fname, 
-                                    images)
-                                )
-                            )
+                filter(is_picture,
+                    map(clean_fname, 
+                        images)
+                    )
+                )
 
         new_images = list(set(im_list) - set(existing_ims))
 
@@ -54,7 +54,7 @@ def add_html(in_dir: str, out_dir: str, im_list: list, html_fname: str):
             Image.open(in_dir + fname).show()
             caption = input('Enter description for file {}: '.format(fname))
             new_tag = soup.new_tag(
-                'img', src=f'{out_dir}{fname}', alt=caption)
+                    'img', src=f'{out_dir}{fname}', alt=caption)
             soup.find('div', {'class', 'image_group'}).append(new_tag)
             with open("index.html", "w", encoding='utf-8') as f:
                 f.write(str(soup))
@@ -69,7 +69,8 @@ if __name__ == '__main__':
     reg_list = process_fnames(BASE_DIR)
     small_list = process_fnames(SMALL_DIR)
     new_ims = list(
-                filter(lambda f: f.endswith('.png'), set(reg_list) - set(small_list))
+            filter(lambda f: f.endswith('.png'), set(reg_list) - set(small_list))
             )
     resize(BASE_DIR, new_ims)
     add_html(BASE_DIR, SMALL_DIR, new_ims, 'index.html')
+
